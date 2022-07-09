@@ -23,7 +23,7 @@ export class Wheel extends Container {
 
   private _winMessageText: Text;
 
-  //TODO ideally the data would all be handled in a model/proxy
+  //TODO the data should all be handled in a model/proxy
   private _wheelSegmentsData: IWheelSegment[] = [];
   private _wheelValueWeightingData: number[][] = [
     [5000, 4],
@@ -176,6 +176,12 @@ export class Wheel extends Container {
   private showWinMessage(): void {
     this._winMessageText.text = TextConstants.youWon.replace('{1}', this._spinResult.value.toString());
     this.addChild(this._winMessageText);
+    gsap.to(this._winMessageText.scale, {
+      duration: 0.5,
+      x: 1.25,
+      y: 1.25,
+      ease: 'power2.easeOut',
+    });
   }
 
   private highlightCurrentSegment(id: number): void {
@@ -194,6 +200,7 @@ export class Wheel extends Container {
     this._wheel.rotation = 0;
     this._previousRotation = 0;
     this._winMessageText.text = '';
+    this._winMessageText.scale.set(1);
   }
 
   private deg2Rad(degrees: number): number {
