@@ -1,7 +1,7 @@
 import {Container, Sprite, utils} from "pixi.js";
 import {ImageNames} from "../../constants/AssetConstants";
 
-export class BackgroundView extends Container {
+export class Background extends Container {
   private _background: Sprite;
 
   constructor() {

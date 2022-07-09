@@ -4,7 +4,7 @@ import {Container, Sprite, Text, TextStyle, Texture} from "pixi.js";
 import {TextConstants} from "../../constants/TextConstants";
 import {Utils} from "../../utils/Utils";
 
-export class TitleScreenView extends Container {
+export class TitleScreen extends Container {
   public clickStart: Signal = new Signal();
   private _titleText: Text;
   private _startButton: Container;

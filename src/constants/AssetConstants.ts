@@ -3,7 +3,8 @@ export const LoaderPath = {
   imageFolder: 'img/',
   imageSuffix: '.png',
   soundFolder: 'snd/',
-  soundSuffix: '.wav'
+  soundSuffix: '.wav',
+  jsonSuffix: '.json'
 }
 export const ImageNames = {
   BACKGROUND: 'background',
@@ -12,6 +13,9 @@ export const ImageNames = {
   SUNBURST: 'sunburst',
   CENTER: 'wheel-center',
   SLICE: 'wheel-slice'
+}
+export const AnimationNames = {
+  COIN_ANIM: 'coin-anim'
 }
 export const SoundNames = {
   COUNTUP: 'credits-rollup',

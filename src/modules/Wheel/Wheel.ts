@@ -1,21 +1,28 @@
 import Signal from 'signals';
 import {Container, Point, Sprite, Text, TextStyle, utils} from "pixi.js";
-import {ImageNames} from "../../constants/AssetConstants";
+import {ImageNames, SoundNames} from "../../constants/AssetConstants";
 import {WheelConstants} from "../../constants/WheelConstants";
 import {Utils} from "../../utils/Utils";
 import {gsap} from "gsap/gsap-core";
 import {IWheelSegment} from "../../interfaces/IWheelSegment";
 import {WheelSegmentSprite} from "./WheelSegmentSprite";
+import {TextConstants} from "../../constants/TextConstants";
 
 export class Wheel extends Container {
   public wheelSpinComplete: Signal = new Signal();
   public playSoundSignal: Signal = new Signal();
+  public stopSoundSignal: Signal = new Signal();
 
   private _wheel: Container;
   private _pointer: Sprite;
+  private _segmentAngle: number;
   private _wheelSegments: WheelSegmentSprite[] = [];
 
   private _spinResult: IWheelSegment;
+
+  private _previousRotation: number = 0;
+
+  private _winMessageText: Text;
 
   //TODO ideally the data would all be handled in a model/proxy
   private _wheelSegmentsData: IWheelSegment[] = [];
@@ -37,9 +44,9 @@ export class Wheel extends Container {
   }
 
   private createWheelData(): void {
-    const segmentAngle: number = 360 / WheelConstants.numSegments;
+    this._segmentAngle = 360 / WheelConstants.numSegments;
     for (let i: number = 0 ; i < WheelConstants.numSegments ; i++) {
-       this.addNewSegment(i, this._wheelValueWeightingData[i][0], this._wheelValueWeightingData[i][1], segmentAngle * i;
+       this.addNewSegment(i, this._wheelValueWeightingData[i][0], this._wheelValueWeightingData[i][1], this._segmentAngle * i);
     }
   }
 
@@ -56,37 +63,14 @@ export class Wheel extends Container {
   private init(): void {
     this.setupWheel();
     this.setupPointer();
-    //TODO BGB delete debug
-    //this.debugWheel();
+    this.setupWinText();
   }
-
-  //TODO BGB delete debug
-  // private _num: number = 0;
-  // private debugWheel(): void {
-  //   const result: IWheelSegment = this._wheelSegmentsData[this._num];
-  //   this.hideAllHighlights();
-  //   this.highlightCurrentSegment(result.id);
-  //   gsap.to(this._wheel, {
-  //     duration: 0.5,
-  //     rotation: this.deg2Rad(result.wheelAngle),
-  //     onComplete: () => {
-  //       gsap.delayedCall( 3, () => {
-  //         this._num++;
-  //         if(this._num === WheelConstants.numSegments) {
-  //           this._num = 0;
-  //         }
-  //         this.debugWheel();
-  //       });
-  //     }
-  //   });
-  // }
 
   private setupWheel(): void {
     this._wheel = new Container();
     let wheelSlice: WheelSegmentSprite;
     let wheelText: Text;
     let wheelData: IWheelSegment;
-    const segmentAngle: number = 360 / WheelConstants.numSegments;
     const wheelTextStyle: TextStyle = Utils.getTextStyle();
     wheelTextStyle.fill = 0x000000;
     wheelTextStyle.fontSize = 100;
@@ -95,7 +79,7 @@ export class Wheel extends Container {
         wheelSlice = new WheelSegmentSprite(utils.TextureCache[ImageNames.SLICE]);
         wheelSlice.scale.set(0.5);
         wheelSlice.anchor.set(0.5, 1);
-        wheelSlice.angle = segmentAngle * i;
+        wheelSlice.angle = this._segmentAngle * i;
         wheelSlice.id = wheelData.id;
         wheelSlice.value = wheelData.value;
         this._wheelSegments.push(wheelSlice);
@@ -122,12 +106,18 @@ export class Wheel extends Container {
     this.addChild(this._pointer);
   }
 
+  private setupWinText(): void {
+    const fontStyle: TextStyle = Utils.getTextStyle();
+    fontStyle.fontSize = 60;
+    this._winMessageText = new Text(TextConstants.youWon, fontStyle);
+    this._winMessageText.anchor.set(0.5);
+    this._winMessageText.y = this._wheel.y + 275;
+  }
+
   public spinWheel(): void {
     this._wheel.rotation = 0;
     this.getSpinResult();
 
-    this.hideAllHighlights();
-    this.highlightCurrentSegment(this._spinResult.id);
     let finalAngle: number = this.deg2Rad(this._spinResult.wheelAngle + (WheelConstants.numRotations * 360));
     const plusMinus: number = Math.random() < 0.5 ? -1 : 1;
     const variance: number = Math.random() * WheelConstants.segmentVariance;
@@ -147,17 +137,38 @@ export class Wheel extends Container {
   }
 
   private checkNextSegment(rotation: number): void {
-   //console.log('bgb', 'spinning', this.rad2Deg(rotation) % 360);
+    const newSegmentId: number = this.getSegmentId(this.rad2Deg(rotation));
+    if (newSegmentId !== this.getSegmentId(this.rad2Deg(this._previousRotation))) {
+      // this.hideAllHighlights();
+      // this.highlightCurrentSegment(newSegmentId);
+      this.playSoundSignal.dispatch(SoundNames.CLICK);
+    }
+    this._previousRotation = rotation;
+  }
+
+  private getSegmentId(degrees: number): number {
+    degrees = degrees % 360;
+    for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
+      if( (-this._wheelSegmentsData[i].wheelAngle - this._segmentAngle / 2) >= degrees) {
+        return this._wheelSegmentsData[i].id;
+      }
+    }
   }
 
   private completeWheelSpin(): void {
     this.hideAllHighlights();
     this.highlightCurrentSegment(this._spinResult.id);
+    this.showWinMessage();
+    this.playSoundSignal.dispatch(SoundNames.LANDING);
     this._wheel.rotation = this._wheel.rotation % 360;
-    gsap.delayedCall(4, () => {
-      this.wheelSpinComplete.dispatch();
-
+    gsap.delayedCall(0.5, () => {
+      this.wheelSpinComplete.dispatch(this._spinResult.value);
     });
+  }
+
+  private showWinMessage(): void {
+    this._winMessageText.text = TextConstants.youWon.replace('{1}', this._spinResult.value.toString());
+    this.addChild(this._winMessageText);
   }
 
   private highlightCurrentSegment(id: number): void {
@@ -174,6 +185,8 @@ export class Wheel extends Container {
     this.hideAllHighlights();
     this._spinResult = null;
     this._wheel.rotation = 0;
+    this._previousRotation = 0;
+    this._winMessageText.text = '';
   }
 
   private deg2Rad(degrees: number): number {
@@ -185,7 +198,7 @@ export class Wheel extends Container {
   }
 
   private getSpinResult(): void {
-    //TODO BGB debug
+    //TODO BGB add debug option
     const values: number[] = [];
     const weights: number[] = [];
     for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
