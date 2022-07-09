@@ -11,7 +11,6 @@ import {TextConstants} from "../../constants/TextConstants";
 export class Wheel extends Container {
   public wheelSpinComplete: Signal = new Signal();
   public playSoundSignal: Signal = new Signal();
-  public stopSoundSignal: Signal = new Signal();
 
   private _wheel: Container;
   private _pointer: Sprite;
@@ -101,8 +100,8 @@ export class Wheel extends Container {
 
   private setupPointer(): void {
     this._pointer = new Sprite(utils.TextureCache[ImageNames.POINTER]);
-    this._pointer.anchor.set(0.5);
-    this._pointer.y = this._wheel.getLocalBounds().top;
+    this._pointer.anchor.set(0.5, 0);
+    this._pointer.y = this._wheel.getLocalBounds().top - 20;
     this.addChild(this._pointer);
   }
 
@@ -139,11 +138,19 @@ export class Wheel extends Container {
   private checkNextSegment(rotation: number): void {
     const newSegmentId: number = this.getSegmentId(this.rad2Deg(rotation));
     if (newSegmentId !== this.getSegmentId(this.rad2Deg(this._previousRotation))) {
-      // this.hideAllHighlights();
-      // this.highlightCurrentSegment(newSegmentId);
+      this.bumpPointer();
       this.playSoundSignal.dispatch(SoundNames.CLICK);
     }
     this._previousRotation = rotation;
+  }
+
+  private bumpPointer(): void {
+    gsap.killTweensOf(this._pointer);
+    this._pointer.angle = -50;
+    gsap.to(this._pointer, {
+      duration : 0.25,
+      angle: 0
+    });
   }
 
   private getSegmentId(degrees: number): number {

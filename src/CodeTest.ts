@@ -45,7 +45,6 @@ export class CodeTest {
       height: 720
     });
     document.body.appendChild(this._app.view);
-    //this._loader = Loader.shared;
     this._imageLoader = new Loader();
     this._animLoader = new Loader();
     this.loadAssets();
