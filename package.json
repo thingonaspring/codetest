@@ -1,0 +1,23 @@
+{
+  "name": "Barry Barber Coding Test",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": "",
+  "license": "",
+  "author": "Barry",
+  "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html --open",
+    "start": "npm run build && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "gsap": "^3.10.4",
+    "pixi.js": "^6.4.2",
+    "signals": "^1.0.0"
+  }
+}
