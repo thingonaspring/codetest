@@ -88,10 +88,8 @@ export class CodeTest {
     this._wheel.x = this._app.view.width / 2;
     this._wheel.y = this._app.view.height / 2;
 
-
     //TODO BGB DEBUG REMOVE
-
-    this.addChild(this._wheel);
+    // this.addChild(this._wheel);
   }
 
   private showTitleScreen(): void {
