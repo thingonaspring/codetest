@@ -1,5 +1,5 @@
 import {Container, Sprite, utils} from "pixi.js";
-import {ImageNames} from "../constants/AssetConstants";
+import {ImageNames} from "../../constants/AssetConstants";
 
 export class BackgroundView extends Container {
   private _background: Sprite;

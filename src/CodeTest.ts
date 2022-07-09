@@ -1,9 +1,9 @@
 import {Application, DisplayObject, Loader, LoaderResource} from 'pixi.js';
 import {ImageNames, LoaderPath, SoundNames} from "./constants/AssetConstants";
-import {TitleScreenView} from "./TitleScreen/TitleScreenView";
-import {BackgroundView} from "./Background/BackgroundView";
+import {TitleScreenView} from "./modules/TitleScreen/TitleScreenView";
+import {BackgroundView} from "./modules/Background/BackgroundView";
 import gsap from "gsap";
-import {Wheel} from "./Wheel/Wheel";
+import {Wheel} from "./modules/Wheel/Wheel";
 
 export class CodeTest {
   private _app: Application;
@@ -77,19 +77,19 @@ export class CodeTest {
 
   private setupTitleScreen(): void {
     this._titleScreen = new TitleScreenView();
-    this._titleScreen.x = this._app.view.width / 2;
-    this._titleScreen.y = this._app.view.height / 2;
+    this.centrallyAlign(this._titleScreen);
     this._titleScreen.alpha = 0;
     this.addChild(this._titleScreen);
   }
 
   private setupWheel(): void {
     this._wheel = new Wheel();
-    this._wheel.x = this._app.view.width / 2;
-    this._wheel.y = this._app.view.height / 2;
+    this.centrallyAlign(this._wheel);
+  }
 
-    //TODO BGB DEBUG REMOVE
-    // this.addChild(this._wheel);
+  private centrallyAlign(item: DisplayObject): void {
+    item.x = this._app.view.width / 2;
+    item.y = this._app.view.height / 2;
   }
 
   private showTitleScreen(): void {

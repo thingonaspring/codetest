@@ -1,10 +1,10 @@
 import Signal from 'signals';
 import {Container, Point, Sprite, Text, TextStyle, utils} from "pixi.js";
-import {ImageNames} from "../constants/AssetConstants";
-import {WheelConstants} from "../constants/WheelConstants";
-import {Utils} from "../utils/Utils";
+import {ImageNames} from "../../constants/AssetConstants";
+import {WheelConstants} from "../../constants/WheelConstants";
+import {Utils} from "../../utils/Utils";
 import {gsap} from "gsap/gsap-core";
-import {IWheelSegment} from "../interfaces/IWheelSegment";
+import {IWheelSegment} from "../../interfaces/IWheelSegment";
 import {WheelSegmentSprite} from "./WheelSegmentSprite";
 
 export class Wheel extends Container {
