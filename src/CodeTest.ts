@@ -70,6 +70,7 @@ export class CodeTest {
   }
 
   private checkAllLoaded(): void {
+    this._loadersCompleted++;
      if (this._loadersCompleted === this._totalLoaders) {
       this.loadingComplete();
     }
