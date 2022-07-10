@@ -7,6 +7,7 @@ import {gsap} from "gsap/gsap-core";
 import {IWheelSegment} from "../../interfaces/IWheelSegment";
 import {WheelSegmentSprite} from "./WheelSegmentSprite";
 import {TextConstants} from "../../constants/TextConstants";
+import {DataConstants} from "../../constants/DataConstants";
 
 export class Wheel extends Container {
   public wheelSpinComplete: Signal = new Signal();
@@ -14,27 +15,15 @@ export class Wheel extends Container {
 
   private _wheel: Container;
   private _pointer: Sprite;
-  private _segmentAngle: number;
-  private _wheelSegments: WheelSegmentSprite[] = [];
-
-  private _spinResult: IWheelSegment;
-
-  private _previousRotation: number = 0;
-
   private _winMessageText: Text;
 
-  //TODO the data should all be handled in a model/proxy
+  private _segmentAngle: number;
+  private _wheelSegments: WheelSegmentSprite[] = [];
   private _wheelSegmentsData: IWheelSegment[] = [];
-  private _wheelValueWeightingData: number[][] = [
-    [5000, 4],
-    [200, 100],
-    [1000, 20],
-    [400, 50],
-    [2000, 10],
-    [200, 100],
-    [1000, 20],
-    [400, 50]
-  ];
+
+  private _spinResult: IWheelSegment;
+  private _previousRotation: number = 0;
+
 
   constructor() {
     super();
@@ -45,7 +34,7 @@ export class Wheel extends Container {
   private createWheelData(): void {
     this._segmentAngle = 360 / WheelConstants.numSegments;
     for (let i: number = 0 ; i < WheelConstants.numSegments ; i++) {
-       this.addNewSegment(i, this._wheelValueWeightingData[i][0], this._wheelValueWeightingData[i][1], this._segmentAngle * i);
+       this.addNewSegment(i, DataConstants.wheelValueWeightingData[i][0], DataConstants.wheelValueWeightingData[i][1], this._segmentAngle * i);
     }
   }
 

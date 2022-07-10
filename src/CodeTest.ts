@@ -6,6 +6,7 @@ import gsap from "gsap";
 import {Wheel} from "./modules/Wheel/Wheel";
 import {sound} from "@pixi/sound";
 import {UserInterface} from "./modules/UserInterface/UserInterface";
+import {CheatPanel} from "./modules/cheats/CheatPanel";
 
 export class CodeTest {
   private _app: Application;
@@ -19,6 +20,7 @@ export class CodeTest {
   private _titleScreen: TitleScreen;
   private _wheel: Wheel;
   private _userInterface: UserInterface;
+  private _cheatPanel: CheatPanel;
 
   private _imageNames: string[] = [
     ImageNames.BACKGROUND,
@@ -95,6 +97,8 @@ export class CodeTest {
     this.setupTitleScreen();
     this.setupWheel();
     this.setupUserInterface();
+    this.setupCheatPanel();
+
     gsap.delayedCall(0.5, () => {
       this.showTitleScreen();
     });
@@ -123,7 +127,15 @@ export class CodeTest {
 
   private setupUserInterface(): void {
     this._userInterface = new UserInterface();
+    this._userInterface.y = this._app.view.height - this._userInterface.height;
     this.addChild(this._userInterface);
+  }
+
+  private setupCheatPanel(): void {
+    this._cheatPanel = new CheatPanel();
+    this._cheatPanel.x = this._cheatPanel.width / 2;
+    this._cheatPanel.y = this._cheatPanel.height / 2;
+    this.addChild(this._cheatPanel);
   }
 
   private centrallyAlign(item: DisplayObject): void {
