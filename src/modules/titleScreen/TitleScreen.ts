@@ -3,11 +3,12 @@ import Signal from 'signals';
 import {Container, Sprite, Text, TextStyle, Texture} from "pixi.js";
 import {TextConstants} from "../../constants/TextConstants";
 import {Utils} from "../../utils/Utils";
+import {SimpleButton} from "../../components/SimpleButton";
 
 export class TitleScreen extends Container {
   public clickStart: Signal = new Signal();
   private _titleText: Text;
-  private _startButton: Container;
+  private _startButton: SimpleButton;
 
   constructor() {
     super();
@@ -28,33 +29,24 @@ export class TitleScreen extends Container {
   }
 
   private setupStartButton(): void {
-    this._startButton = new Container();
+    this._startButton = new SimpleButton();
     const style: TextStyle = Utils.getTextStyle();
     style.fontSize = 48;
-    const buttonText: Text = new Text(TextConstants.clickToSpin, style);
-    buttonText.anchor.set(0.5);
-    this._startButton.addChild(buttonText);
+    this._startButton.updateTextLabel(TextConstants.clickToSpin, style);
+    this._startButton.setClickAreaVisible(false);
     this._startButton.x = this._titleText.x;
     this._startButton.y = this._titleText.y + this._titleText.height;
-    const clickArea: Sprite = new Sprite(Texture.WHITE);
-    clickArea.alpha = 0;
-    clickArea.anchor.set(0.5);
-    clickArea.interactive = true;
-    clickArea.buttonMode = true;
-    clickArea.width = this._startButton.width * 1.5;
-    clickArea.height = this._startButton.height * 1.5;
-    clickArea.on('pointerup', () => {
+    this._startButton.clickHandler = () => {
       this.onStartButtonClick();
-    });
-    clickArea.on('pointerover', () => {
+    }
+    this._startButton.overHandler = () => {
       this.disableButtonAnimation();
-      buttonText.tint = 0xffff00;
-    });
-    clickArea.on('pointerout', () => {99
-      buttonText.tint = 0xffffff;
+      this._startButton.colourText(0xffff00);
+    }
+    this._startButton.outHandler = () => {
       this.animateButton();
-    });
-    this._startButton.addChild(clickArea);
+      this._startButton.colourText(0xffffff);
+    }
     this.addChild(this._startButton);
   }
 
@@ -79,8 +71,7 @@ export class TitleScreen extends Container {
   }
 
   private setButtonState(enabled: boolean): void {
-    this._startButton.buttonMode = enabled;
-    this._startButton.interactive = enabled;
+    this._startButton.isEnabled = enabled;
   }
 
   private disableButtonAnimation(): void {

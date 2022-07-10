@@ -5,6 +5,8 @@ import {Utils} from "../utils/Utils";
 export class SimpleButton extends Container {
   private _isEnabled: boolean;
   private _onClickHandler: Function;
+  private _onOverHandler: Function;
+  private _onOutHandler: Function;
   private _clickArea: Sprite;
   private _textLabel: Text;
 
@@ -22,6 +24,22 @@ export class SimpleButton extends Container {
     this._onClickHandler = handler;
   }
 
+  public set overHandler(handler: Function) {
+    this._onOverHandler = handler;
+  }
+
+  public set outHandler(handler: Function) {
+    this._onOutHandler = handler;
+  }
+
+  public setClickAreaVisible(visible: boolean): void {
+    this._clickArea.alpha = visible ? 0.5 : 0;
+  }
+
+  public colourText(color: number): void {
+    this._textLabel.tint = color;
+  }
+
   constructor() {
     super();
     this.init();
@@ -29,7 +47,6 @@ export class SimpleButton extends Container {
   }
 
   private init(): void {
-
     this._clickArea = new Sprite(Texture.WHITE);
     this._clickArea.alpha = 0.5;
     this._clickArea.anchor.set(0.5);
@@ -54,8 +71,11 @@ export class SimpleButton extends Container {
     this._clickArea.height = this.height;
   }
 
-  public updateTextLabel(text: string): void {
+  public updateTextLabel(text: string, newStyle:TextStyle = null): void {
     this._textLabel.text = text;
+    if (newStyle) {
+      this._textLabel.style = newStyle;
+    }
     this.updateClickArea();
   }
 
@@ -65,10 +85,16 @@ export class SimpleButton extends Container {
 
   private handlePointerOver(): void {
     this.changeState(ButtonStates.OVER);
+    if (this._onOverHandler) {
+      this._onOverHandler.call(this);
+    }
   }
 
   private handlePointerOut(): void {
     this.changeState(ButtonStates.OUT);
+    if (this._onOutHandler) {
+      this._onOutHandler.call(this);
+    }
   }
 
   private handlePointerDown(): void {
