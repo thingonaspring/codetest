@@ -62,7 +62,7 @@ export class WinAnimation {
     }
   }
 
-  //todo refactor this to use EmitterConfig rather than any
+  //TODO BGB refactor to remove any return type
   private getAnimationConfig(): any {
     return {
       'alpha': {

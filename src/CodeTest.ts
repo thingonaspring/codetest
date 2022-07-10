@@ -16,7 +16,7 @@ export class CodeTest {
   private _imageLoader: Loader;
   private _animLoader: Loader;
   private _loadersCompleted: number = 0;
-  private _totalLoaders: number = 2; //TODO BGB refactor
+  private _totalLoaders: number = 2; //TODO BGB refactor, don't like this to check all complete
 
   private _background: Background;
   private _titleScreen: TitleScreen;
@@ -70,8 +70,7 @@ export class CodeTest {
   }
 
   private checkAllLoaded(): void {
-    this._loadersCompleted++;
-    if (this._loadersCompleted === this._totalLoaders) {
+     if (this._loadersCompleted === this._totalLoaders) {
       this.loadingComplete();
     }
   }
