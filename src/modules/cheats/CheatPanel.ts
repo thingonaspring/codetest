@@ -35,5 +35,10 @@ export class CheatPanel extends Container {
     this._popupPanel.visible = this._popupOpen;
   }
 
-
+  public setCheatsEnabled(enabled: boolean): void {
+    if(!enabled && this._popupOpen) {
+      this.togglePopupPanel();
+    }
+    this._cheatButton.isEnabled = enabled;
+  }
 }

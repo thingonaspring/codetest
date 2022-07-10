@@ -24,9 +24,9 @@ export class CodeTest {
 
   private _imageNames: string[] = [
     ImageNames.BACKGROUND,
-    ImageNames.GLOW,
+    //ImageNames.GLOW,
     ImageNames.POINTER,
-    ImageNames.SUNBURST,
+    //ImageNames.SUNBURST,
     ImageNames.CENTER,
     ImageNames.SLICE
   ];
@@ -151,11 +151,13 @@ export class CodeTest {
           this.onStartClicked();
         });
         this._titleScreen.activate();
+        this._cheatPanel.setCheatsEnabled(true);
       }
     });
   }
 
   private onStartClicked(): void {
+    this._cheatPanel.setCheatsEnabled(false);
     this._titleScreen.visible = false;
     this.showWheelScreen();
   }

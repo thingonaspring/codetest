@@ -89,11 +89,9 @@ export class TitleScreen extends Container {
   }
 
   private removeTitleScreen(): void {
-    gsap.to(this, 1, {
+    this.clickStart.dispatch();
+    gsap.to(this, 0.5, {
       alpha: 0,
-      onComplete: () => {
-        this.clickStart.dispatch();
-      }
     });
   }
 

@@ -8,9 +8,9 @@ export const LoaderPath = {
 }
 export const ImageNames = {
   BACKGROUND: 'background',
-  GLOW: 'glow',
+  //GLOW: 'glow',
   POINTER: 'pointer',
-  SUNBURST: 'sunburst',
+  //SUNBURST: 'sunburst',
   CENTER: 'wheel-center',
   SLICE: 'wheel-slice'
 }

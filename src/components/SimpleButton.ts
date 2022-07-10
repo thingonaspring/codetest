@@ -14,8 +14,8 @@ export class SimpleButton extends Container {
 
   public set isEnabled(enabled: boolean) {
     this._isEnabled = enabled;
-    this.buttonMode = enabled;
-    this.interactive = enabled;
+    this._clickArea.buttonMode = enabled;
+    this._clickArea.interactive = enabled;
   }
 
   public set clickHandler(handler: Function) {
