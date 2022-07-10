@@ -8,6 +8,7 @@ import {IWheelSegment} from "../../interfaces/IWheelSegment";
 import {WheelSegmentSprite} from "./WheelSegmentSprite";
 import {TextConstants} from "../../constants/TextConstants";
 import {DataConstants} from "../../constants/DataConstants";
+import {CheatIds} from "../../enums/CheatIds";
 
 export class Wheel extends Container {
   public wheelSpinComplete: Signal = new Signal();
@@ -102,10 +103,9 @@ export class Wheel extends Container {
     this._winMessageText.y = this._wheel.y + 275;
   }
 
-  public spinWheel(): void {
+  public spinWheel(cheatId: number): void {
+    this.getSpinResult(cheatId);
     this._wheel.rotation = 0;
-    this.getSpinResult();
-
     let finalAngle: number = this.deg2Rad(this._spinResult.wheelAngle + (WheelConstants.numRotations * 360));
     const plusMinus: number = Math.random() < 0.5 ? -1 : 1;
     const variance: number = Math.random() * WheelConstants.segmentVariance;
@@ -200,17 +200,23 @@ export class Wheel extends Container {
     return rad * (180.0 / Math.PI);
   }
 
-  private getSpinResult(): void {
-    //TODO BGB add debug option
-    const values: number[] = [];
-    const weights: number[] = [];
-    for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
-      values.push(this._wheelSegmentsData[i].value);
-      weights.push(this._wheelSegmentsData[i].weighting);
-    }
-    const resultIndex: number = Utils.getWeightedRandom(values, weights);
-    this._spinResult = this._wheelSegmentsData[resultIndex];
-    //this._spinResult = this._wheelSegmentsData[Math.floor(Math.random() * this._wheelSegmentsData.length)];
+  private getSpinResult(cheatId: number): void {
+    switch (cheatId) {
+      case CheatIds.WEIGHTED:
+        const values: number[] = [];
+        const weights: number[] = [];
+        for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
+          values.push(this._wheelSegmentsData[i].value);
+          weights.push(this._wheelSegmentsData[i].weighting);
+        }
+        const resultIndex: number = Utils.getWeightedRandom(values, weights);
+        this._spinResult = this._wheelSegmentsData[resultIndex];
+        break;
+    case CheatIds.RANDOM:
+      this._spinResult = this._wheelSegmentsData[Math.floor(Math.random() * this._wheelSegmentsData.length)];
+      break;
+    default:
+        this._spinResult = this._wheelSegmentsData[cheatId];
   }
 
 

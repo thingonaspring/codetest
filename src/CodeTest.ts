@@ -144,6 +144,7 @@ export class CodeTest {
   }
 
   private showTitleScreen(): void {
+    this._cheatPanel.setCheatsEnabled(true);
     gsap.to([this._titleScreen, this._background], 3, {
       alpha: 1,
       onComplete: () => {
@@ -151,7 +152,6 @@ export class CodeTest {
           this.onStartClicked();
         });
         this._titleScreen.activate();
-        this._cheatPanel.setCheatsEnabled(true);
       }
     });
   }
@@ -171,10 +171,9 @@ export class CodeTest {
       alpha: 1,
       onComplete: () => {
         this._wheel.wheelSpinComplete.add((winValue: number) => {
-          // this.completeWheelSpin();
           this.doWinCountup(winValue);
         });
-        this._wheel.spinWheel();
+        this._wheel.spinWheel(this._cheatPanel.cheatValueId);
       }
     });
   }
