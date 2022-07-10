@@ -174,7 +174,17 @@ export class Wheel extends Container {
   }
 
   private highlightCurrentSegment(id: number): void {
-    this._wheelSegments[id].alpha = 1;
+    const winningSegmentSprite: WheelSegmentSprite = this._wheelSegments[id];
+    winningSegmentSprite.alpha = 0.5;
+    gsap.to(winningSegmentSprite, {
+      duration: 0.25,
+      alpha: 1,
+      repeat: 5,
+      yoyo: true,
+      onComplete: () => {
+        winningSegmentSprite.alpha = 1;
+      }
+    });
   }
 
   private hideAllHighlights(): void {
@@ -205,19 +215,18 @@ export class Wheel extends Container {
       case CheatIds.WEIGHTED:
         const values: number[] = [];
         const weights: number[] = [];
-        for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
+        for (let i: number = 0; i < this._wheelSegmentsData.length; i++) {
           values.push(this._wheelSegmentsData[i].value);
           weights.push(this._wheelSegmentsData[i].weighting);
         }
         const resultIndex: number = Utils.getWeightedRandom(values, weights);
         this._spinResult = this._wheelSegmentsData[resultIndex];
         break;
-    case CheatIds.RANDOM:
-      this._spinResult = this._wheelSegmentsData[Math.floor(Math.random() * this._wheelSegmentsData.length)];
-      break;
-    default:
+      case CheatIds.RANDOM:
+        this._spinResult = this._wheelSegmentsData[Math.floor(Math.random() * this._wheelSegmentsData.length)];
+        break;
+      default:
         this._spinResult = this._wheelSegmentsData[cheatId];
+    }
   }
-
-
 }

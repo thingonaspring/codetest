@@ -37,6 +37,7 @@ export class TitleScreen extends Container {
     this._startButton.x = this._titleText.x;
     this._startButton.y = this._titleText.y + this._titleText.height;
     this._startButton.clickHandler = () => {
+      this._startButton.colourText(0xffff00);
       this.onStartButtonClick();
     }
     this._startButton.overHandler = () => {
