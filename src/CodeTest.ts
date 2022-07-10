@@ -3,11 +3,12 @@ import {AnimationNames, ImageNames, LoaderPath, SoundNames} from "./constants/As
 import {TitleScreen} from "./modules/TitleScreen/TitleScreen";
 import {Background} from "./modules/Background/Background";
 import gsap from "gsap";
-import {Wheel} from "./modules/Wheel/Wheel";
 import {sound} from "@pixi/sound";
 import {UserInterface} from "./modules/UserInterface/UserInterface";
 import {CheatPanel} from "./modules/cheats/CheatPanel";
 import {DataConstants} from "./constants/DataConstants";
+import {WinAnimation} from "./modules/winSequence/WinAnimation";
+import {Wheel} from "./modules/wheelScreen/Wheel";
 
 export class CodeTest {
   private _app: Application;
@@ -22,11 +23,12 @@ export class CodeTest {
   private _wheel: Wheel;
   private _userInterface: UserInterface;
   private _cheatPanel: CheatPanel;
+  private _winAnimation: WinAnimation;
 
   constructor() {
     this._app = new Application({
-      width: 1280,
-      height: 720
+      width: DataConstants.screenDimensions.x,
+      height: DataConstants.screenDimensions.y
     });
     document.body.appendChild(this._app.view);
     this._imageLoader = new Loader();
@@ -76,6 +78,7 @@ export class CodeTest {
 
   private loadingComplete(): void {
     this.setupBackground();
+    this.setupWinAnimations();
     this.setupTitleScreen();
     this.setupWheel();
     this.setupUserInterface();
@@ -97,10 +100,8 @@ export class CodeTest {
     this.centrallyAlign(this._titleScreen);
     this._titleScreen.alpha = 0;
     this.addChild(this._titleScreen);
-
     const sheet = this._animLoader.resources[AnimationNames.COIN_ANIM].spritesheet;
     this._titleScreen.createSpinningCoin(sheet);
-
   }
 
   private setupWheel(): void {
@@ -115,6 +116,12 @@ export class CodeTest {
     this._userInterface = new UserInterface();
     this._userInterface.y = this._app.view.height - this._userInterface.height;
     this.addChild(this._userInterface);
+  }
+
+  private setupWinAnimations(): void {
+    const sheet = this._animLoader.resources[AnimationNames.COIN_ANIM].spritesheet;
+    this._winAnimation = new WinAnimation(sheet);
+    this.addChild(this._winAnimation.particleContainer);
   }
 
   private setupCheatPanel(): void {
@@ -166,9 +173,11 @@ export class CodeTest {
 
   protected doWinCountup(winValue: number): void {
     this.playSound(SoundNames.COUNTUP, true);
+    this._winAnimation.startParticleAnimation(winValue / 10);
     this._userInterface.addToBalance(winValue, () => {
       this.stopSound(SoundNames.COUNTUP);
       this.playSound(SoundNames.LANDING);
+      this._winAnimation.stopParticleAnimation();
       gsap.delayedCall(1, () => {
         this.completeWheelSpin();
       });
