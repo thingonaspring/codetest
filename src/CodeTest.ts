@@ -1,4 +1,4 @@
-import {Application, DisplayObject, Loader} from 'pixi.js';
+import {AnimatedSprite, Application, DisplayObject, Loader} from 'pixi.js';
 import {AnimationNames, ImageNames, LoaderPath, SoundNames} from "./constants/AssetConstants";
 import {TitleScreen} from "./modules/TitleScreen/TitleScreen";
 import {Background} from "./modules/Background/Background";
@@ -7,6 +7,7 @@ import {Wheel} from "./modules/Wheel/Wheel";
 import {sound} from "@pixi/sound";
 import {UserInterface} from "./modules/UserInterface/UserInterface";
 import {CheatPanel} from "./modules/cheats/CheatPanel";
+import {DataConstants} from "./constants/DataConstants";
 
 export class CodeTest {
   private _app: Application;
@@ -14,32 +15,13 @@ export class CodeTest {
   private _imageLoader: Loader;
   private _animLoader: Loader;
   private _loadersCompleted: number = 0;
-  private _totalLoaders: number = 2;
+  private _totalLoaders: number = 2; //TODO BGB refactor
 
   private _background: Background;
   private _titleScreen: TitleScreen;
   private _wheel: Wheel;
   private _userInterface: UserInterface;
   private _cheatPanel: CheatPanel;
-
-  private _imageNames: string[] = [
-    ImageNames.BACKGROUND,
-    //ImageNames.GLOW,
-    ImageNames.POINTER,
-    //ImageNames.SUNBURST,
-    ImageNames.CENTER,
-    ImageNames.SLICE
-  ];
-
-  private _animationNames: string[] = [
-    AnimationNames.COIN_ANIM
-  ]
-
-  private _soundNames: string[] = [
-    SoundNames.COUNTUP,
-    SoundNames.CLICK,
-    SoundNames.LANDING
-  ];
 
   constructor() {
     this._app = new Application({
@@ -53,7 +35,7 @@ export class CodeTest {
   }
 
   protected loadAssets(): void {
-    this._imageNames.forEach((imageName: string) => {
+    DataConstants.imageNames.forEach((imageName: string) => {
       const imagePath: string = LoaderPath.assetPath + LoaderPath.imageFolder + imageName + LoaderPath.imageSuffix;
       this._imageLoader.add(imageName, imagePath);
     });
@@ -61,7 +43,7 @@ export class CodeTest {
     this._imageLoader.onComplete.add(() => {
       this.checkAllLoaded();
     });
-    this._animationNames.forEach((animName: string) => {
+    DataConstants.animationNames.forEach((animName: string) => {
       const animPath: string = LoaderPath.assetPath + LoaderPath.imageFolder + animName + LoaderPath.jsonSuffix;
       this._animLoader.add(animName, animPath);
     });
@@ -69,7 +51,7 @@ export class CodeTest {
     this._animLoader.onComplete.add(() => {
       this.checkAllLoaded();
     });
-    this._soundNames.forEach((soundName: string) => {
+    DataConstants.soundNames.forEach((soundName: string) => {
       const soundPath: string = LoaderPath.assetPath + LoaderPath.soundFolder + soundName + LoaderPath.soundSuffix;
       sound.add(soundName, soundPath);
     });
@@ -115,6 +97,10 @@ export class CodeTest {
     this.centrallyAlign(this._titleScreen);
     this._titleScreen.alpha = 0;
     this.addChild(this._titleScreen);
+
+    const sheet = this._animLoader.resources[AnimationNames.COIN_ANIM].spritesheet;
+    this._titleScreen.createSpinningCoin(sheet);
+
   }
 
   private setupWheel(): void {

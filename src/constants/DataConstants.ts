@@ -1,3 +1,5 @@
+import {AnimationNames, ImageNames, SoundNames} from "./AssetConstants";
+
 export class DataConstants {
   //TODO BGB turn this in to a key/value pairing rather than [0] and [1] access
   public static wheelValueWeightingData: number[][] = [
@@ -10,4 +12,21 @@ export class DataConstants {
     [1000, 20],
     [400, 50]
   ];
+
+  public static imageNames: string[] = [
+    ImageNames.BACKGROUND,
+    ImageNames.POINTER,
+    ImageNames.CENTER,
+    ImageNames.SLICE
+  ];
+
+  public static soundNames: string [] = [
+    SoundNames.COUNTUP,
+    SoundNames.CLICK,
+    SoundNames.LANDING
+  ]
+
+  public static animationNames: string[] = [
+    AnimationNames.COIN_ANIM
+  ]
 }

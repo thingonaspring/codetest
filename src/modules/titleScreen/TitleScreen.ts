@@ -1,18 +1,31 @@
 import gsap from "gsap";
 import Signal from 'signals';
-import {Container, Text, TextStyle} from "pixi.js";
+import {AnimatedSprite, Container, Spritesheet, Text, TextStyle} from "pixi.js";
 import {TextConstants} from "../../constants/TextConstants";
 import {Utils} from "../../utils/Utils";
 import {SimpleButton} from "../../components/SimpleButton";
+import {AnimationNames} from "../../constants/AssetConstants";
 
 export class TitleScreen extends Container {
   public clickStart: Signal = new Signal();
   private _titleText: Text;
   private _startButton: SimpleButton;
+  private _spinningCoin: AnimatedSprite;
 
   constructor() {
     super();
     this.init();
+  }
+
+  public createSpinningCoin(spritesheet: Spritesheet): void {
+    const animatedSprite: AnimatedSprite = new AnimatedSprite(spritesheet.animations[AnimationNames.COIN_ANIM]);
+    animatedSprite.anchor.set(0.5);
+    animatedSprite.scale.set(0.5);
+    animatedSprite.y = -200;
+    animatedSprite.loop = true;
+    animatedSprite.animationSpeed = animatedSprite.animationSpeed / 3;
+    animatedSprite.play();
+    this.addChildAt(animatedSprite,0);
   }
 
   private init(): void {
@@ -37,7 +50,6 @@ export class TitleScreen extends Container {
     this._startButton.x = this._titleText.x;
     this._startButton.y = this._titleText.y + this._titleText.height;
     this._startButton.clickHandler = () => {
-      this._startButton.colourText(0xffff00);
       this.onStartButtonClick();
     }
     this._startButton.overHandler = () => {
@@ -77,6 +89,7 @@ export class TitleScreen extends Container {
 
   private disableButtonAnimation(): void {
     gsap.killTweensOf(this._startButton);
+    this._startButton.colourText(0xffff00);
     this._startButton.alpha = 1;
   }
 

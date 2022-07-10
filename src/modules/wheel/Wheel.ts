@@ -171,6 +171,12 @@ export class Wheel extends Container {
       y: 1.25,
       ease: 'power2.easeOut',
     });
+    gsap.to(this._winMessageText, 0.5, {
+      alpha: 0.25,
+      repeat: -1,
+      ease: 'sine.inOut',
+      yoyo: true
+    });
   }
 
   private highlightCurrentSegment(id: number): void {
@@ -198,6 +204,8 @@ export class Wheel extends Container {
     this._spinResult = null;
     this._wheel.rotation = 0;
     this._previousRotation = 0;
+    gsap.killTweensOf(this._winMessageText);
+    this._winMessageText.alpha = 1;
     this._winMessageText.text = '';
     this._winMessageText.scale.set(1)
   }
