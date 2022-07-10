@@ -200,7 +200,7 @@ export class Wheel extends Container {
     this._wheel.rotation = 0;
     this._previousRotation = 0;
     this._winMessageText.text = '';
-    this._winMessageText.scale.set(1);
+    this._winMessageText.scale.set(1)
   }
 
   private deg2Rad(degrees: number): number {
