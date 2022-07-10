@@ -138,7 +138,8 @@ export class CodeTest {
 
   private showTitleScreen(): void {
     this._cheatPanel.setCheatsEnabled(true);
-    gsap.to([this._titleScreen, this._background], 3, {
+    gsap.to([this._titleScreen, this._background],  {
+      duration: 1.5,
       alpha: 1,
       onComplete: () => {
         this._titleScreen.clickStart.add(() => {

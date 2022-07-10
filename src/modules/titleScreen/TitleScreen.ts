@@ -10,7 +10,6 @@ export class TitleScreen extends Container {
   public clickStart: Signal = new Signal();
   private _titleText: Text;
   private _startButton: SimpleButton;
-  private _spinningCoin: AnimatedSprite;
 
   constructor() {
     super();
@@ -61,9 +60,11 @@ export class TitleScreen extends Container {
       this._startButton.colourText(0xffffff);
     }
     this.addChild(this._startButton);
+    this._startButton.setVisible(false);
   }
 
   public activate(): void {
+    this._startButton.setVisible(true);
     this.animateButton();
     this.setButtonState(true);
   }
@@ -71,6 +72,7 @@ export class TitleScreen extends Container {
   private onStartButtonClick(): void {
     this.disableButtonAnimation();
     this.setButtonState(false);
+    this._startButton.setVisible(false);
     this.removeTitleScreen();
   }
 
