@@ -34,12 +34,12 @@ export class Wheel extends Container {
 
   private createWheelData(): void {
     this._segmentAngle = 360 / WheelConstants.numSegments;
-    for (let i: number = 0 ; i < WheelConstants.numSegments ; i++) {
-       this.addNewSegment(i, DataConstants.wheelValueWeightingData[i][0], DataConstants.wheelValueWeightingData[i][1], this._segmentAngle * i);
+    for (let i: number = 0; i < WheelConstants.numSegments; i++) {
+      this.addNewSegment(i, DataConstants.wheelValueWeightingData[i][0], DataConstants.wheelValueWeightingData[i][1], this._segmentAngle * i);
     }
   }
 
-  private addNewSegment(id: number, value: number, weighting: number, wheelAngle: number ): void {
+  private addNewSegment(id: number, value: number, weighting: number, wheelAngle: number): void {
     const newSegment: IWheelSegment = {
       id: id,
       value: value,
@@ -63,21 +63,21 @@ export class Wheel extends Container {
     const wheelTextStyle: TextStyle = Utils.getTextStyle();
     wheelTextStyle.fill = 0x000000;
     wheelTextStyle.fontSize = 100;
-    for (let i: number = 0 ; i < WheelConstants.numSegments ; i++) {
-        wheelData = this._wheelSegmentsData[i];
-        wheelSlice = new WheelSegmentSprite(utils.TextureCache[ImageNames.SLICE]);
-        wheelSlice.scale.set(0.5);
-        wheelSlice.anchor.set(0.5, 1);
-        wheelSlice.angle = this._segmentAngle * i;
-        wheelSlice.id = wheelData.id;
-        wheelSlice.value = wheelData.value;
-        this._wheelSegments.push(wheelSlice);
-        wheelText = new Text(wheelData.value.toString(), wheelTextStyle);
-        wheelText.anchor.set(0.5);
-        wheelText.position = (new Point(wheelSlice.position.x, wheelSlice.position.y - 300));
-        wheelText.angle = 90;
-        wheelSlice.addChild(wheelText);
-        this._wheel.addChild(wheelSlice);
+    for (let i: number = 0; i < WheelConstants.numSegments; i++) {
+      wheelData = this._wheelSegmentsData[i];
+      wheelSlice = new WheelSegmentSprite(utils.TextureCache[ImageNames.SLICE]);
+      wheelSlice.scale.set(0.5);
+      wheelSlice.anchor.set(0.5, 1);
+      wheelSlice.angle = this._segmentAngle * i;
+      wheelSlice.id = wheelData.id;
+      wheelSlice.value = wheelData.value;
+      this._wheelSegments.push(wheelSlice);
+      wheelText = new Text(wheelData.value.toString(), wheelTextStyle);
+      wheelText.anchor.set(0.5);
+      wheelText.position = (new Point(wheelSlice.position.x, wheelSlice.position.y - 300));
+      wheelText.angle = 90;
+      wheelSlice.addChild(wheelText);
+      this._wheel.addChild(wheelSlice);
     }
 
     const centre: Sprite = new Sprite(utils.TextureCache[ImageNames.CENTER]);
@@ -137,15 +137,15 @@ export class Wheel extends Container {
     gsap.killTweensOf(this._pointer);
     this._pointer.angle = -50;
     gsap.to(this._pointer, {
-      duration : 0.25,
+      duration: 0.25,
       angle: 0
     });
   }
 
   private getSegmentId(degrees: number): number {
     degrees = degrees % 360;
-    for(let i: number = 0 ; i < this._wheelSegmentsData.length ; i++ ) {
-      if( (-this._wheelSegmentsData[i].wheelAngle - this._segmentAngle / 2) >= degrees) {
+    for (let i: number = 0; i < this._wheelSegmentsData.length; i++) {
+      if ((-this._wheelSegmentsData[i].wheelAngle - this._segmentAngle / 2) >= degrees) {
         return this._wheelSegmentsData[i].id;
       }
     }
@@ -188,7 +188,7 @@ export class Wheel extends Container {
   }
 
   private hideAllHighlights(): void {
-    this._wheelSegments.forEach( (segment: Sprite) => {
+    this._wheelSegments.forEach((segment: Sprite) => {
       segment.alpha = 0.75;
     });
   }

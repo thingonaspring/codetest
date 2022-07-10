@@ -4,7 +4,6 @@ import {SimpleButton} from "../../components/SimpleButton";
 import {DataConstants} from "../../constants/DataConstants";
 import {CheatIds} from "../../enums/CheatIds";
 import {Utils} from "../../utils/Utils";
-import {TextStyleFontStyle} from "@pixi/text";
 
 export class CheatPanel extends Container {
   private _popupPanel: Container;
@@ -50,7 +49,7 @@ export class CheatPanel extends Container {
   }
 
   private getCheatText(): string {
-    switch(this._cheatValueId) {
+    switch (this._cheatValueId) {
       case CheatIds.RANDOM:
         return TextConstants.cheatRandom;
       case CheatIds.WEIGHTED:
@@ -64,8 +63,8 @@ export class CheatPanel extends Container {
     this._popupPanel = new Container();
     //add cheat button per segment
     let buttonX: number = 0;
-    let button:SimpleButton;
-    for (let i: number = 0 ; i < DataConstants.wheelValueWeightingData.length ; i++ ){
+    let button: SimpleButton;
+    for (let i: number = 0; i < DataConstants.wheelValueWeightingData.length; i++) {
       button = new SimpleButton();
       button.updateTextLabel(DataConstants.wheelValueWeightingData[i][0].toString());
       button.x = buttonX;
@@ -111,7 +110,7 @@ export class CheatPanel extends Container {
   }
 
   public setCheatsEnabled(enabled: boolean): void {
-    if(!enabled && this._popupOpen) {
+    if (!enabled && this._popupOpen) {
       this.togglePopupPanel();
     }
     this._cheatButton.isEnabled = enabled;

@@ -18,7 +18,8 @@ export class UserInterface extends Container {
     this.addChild(this._balanceDisplay);
   }
 
-  public addToBalance(winValue: number, callback: Function = () => {}): void {
+  public addToBalance(winValue: number, callback: Function = () => {
+  }): void {
     const newBalanceValue: number = this._balance + winValue;
     const newBalance: any = {balance: this._balance};
 
@@ -29,7 +30,7 @@ export class UserInterface extends Container {
       onUpdate: () => {
         this._balanceDisplay.text = TextConstants.credits + newBalance.balance.toFixed(2).toString();
       },
-      onComplete: ()=> {
+      onComplete: () => {
         this._balance = newBalanceValue;
         callback.call(null);
       }

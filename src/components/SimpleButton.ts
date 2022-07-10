@@ -71,7 +71,7 @@ export class SimpleButton extends Container {
     this._clickArea.height = this.height;
   }
 
-  public updateTextLabel(text: string, newStyle:TextStyle = null): void {
+  public updateTextLabel(text: string, newStyle: TextStyle = null): void {
     this._textLabel.text = text;
     if (newStyle) {
       this._textLabel.style = newStyle;

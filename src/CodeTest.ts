@@ -1,4 +1,4 @@
-import {Application, DisplayObject, Loader, LoaderResource} from 'pixi.js';
+import {Application, DisplayObject, Loader} from 'pixi.js';
 import {AnimationNames, ImageNames, LoaderPath, SoundNames} from "./constants/AssetConstants";
 import {TitleScreen} from "./modules/TitleScreen/TitleScreen";
 import {Background} from "./modules/Background/Background";
@@ -42,7 +42,7 @@ export class CodeTest {
   ];
 
   constructor() {
-    this._app =  new Application({
+    this._app = new Application({
       width: 1280,
       height: 720
     });
@@ -58,7 +58,7 @@ export class CodeTest {
       this._imageLoader.add(imageName, imagePath);
     });
     this._imageLoader.load();
-    this._imageLoader.onComplete.add( () => {
+    this._imageLoader.onComplete.add(() => {
       this.checkAllLoaded();
     });
     this._animationNames.forEach((animName: string) => {
@@ -66,7 +66,7 @@ export class CodeTest {
       this._animLoader.add(animName, animPath);
     });
     this._animLoader.load();
-    this._animLoader.onComplete.add( () => {
+    this._animLoader.onComplete.add(() => {
       this.checkAllLoaded();
     });
     this._soundNames.forEach((soundName: string) => {
@@ -77,7 +77,7 @@ export class CodeTest {
 
   private playSound(soundName: string, loop: boolean = false): void {
     if (sound.exists(soundName)) {
-      sound.play(soundName, { loop: loop } );
+      sound.play(soundName, {loop: loop});
     }
   }
 
@@ -119,7 +119,7 @@ export class CodeTest {
 
   private setupWheel(): void {
     this._wheel = new Wheel();
-    this._wheel.playSoundSignal.add( (soundName: string, loop: boolean = false) => {
+    this._wheel.playSoundSignal.add((soundName: string, loop: boolean = false) => {
       this.playSound(soundName, loop);
     });
     this.centrallyAlign(this._wheel);
@@ -148,7 +148,7 @@ export class CodeTest {
     gsap.to([this._titleScreen, this._background], 3, {
       alpha: 1,
       onComplete: () => {
-        this._titleScreen.clickStart.add( () => {
+        this._titleScreen.clickStart.add(() => {
           this.onStartClicked();
         });
         this._titleScreen.activate();
@@ -198,7 +198,7 @@ export class CodeTest {
     this.showTitleScreen();
   }
 
-  private addChild(child:DisplayObject): void {
+  private addChild(child: DisplayObject): void {
     this._app.stage.addChild(child);
   }
 

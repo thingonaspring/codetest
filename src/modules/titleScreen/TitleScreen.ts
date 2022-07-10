@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import Signal from 'signals';
-import {Container, Sprite, Text, TextStyle, Texture} from "pixi.js";
+import {Container, Text, TextStyle} from "pixi.js";
 import {TextConstants} from "../../constants/TextConstants";
 import {Utils} from "../../utils/Utils";
 import {SimpleButton} from "../../components/SimpleButton";
@@ -57,9 +57,9 @@ export class TitleScreen extends Container {
   }
 
   private onStartButtonClick(): void {
-      this.disableButtonAnimation();
-      this.setButtonState(false);
-      this.removeTitleScreen();
+    this.disableButtonAnimation();
+    this.setButtonState(false);
+    this.removeTitleScreen();
   }
 
   private animateButton(): void {
